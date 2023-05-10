@@ -101,12 +101,11 @@ async def get_book_details(client, message):
         message_text = f"<b>{title}</b> by {authors}\n\n"
         message_text += f"<b>Publisher:</b> {publisher}\n"
         message_text += f"<b>Publication Date:</b> {published_date}\n\n"
-        message_text += f"<i>{description}</i>\n"
-        message_text += f"Thumbnail URL: {thumbnail_url}"
+        message_text += f"<i>{description}</i>"
 
     # Send the message with the book details and thumbnail URL
     await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
-    await message.reply_photo(thumbnail_url)
+    await message.reply_photo(thumbnail_url,caption=message_text)
 
 @FilterBot.on_message(filters.private & filters.command("book"))
 async def handle_book_command(client, message):
