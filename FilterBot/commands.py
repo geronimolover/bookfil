@@ -1,4 +1,4 @@
-import random 
+import random
 from pyrogram import Client as FilterBot, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from configs import BOT_PICS, StartTxT, HelpTxT, AboutTxT, LOGGER
@@ -58,6 +58,33 @@ async def aboutCMD(client: FilterBot, message: Message):
     else:
         await message.reply_photo(photo=random.choice(BOT_PICS), caption=AboutTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
 
+@FilterBot.on_message(filters.private & filters.command("book"))
+def get_book_details(client, message):
+    # Get the search query from the message text
+    search_query = " ".join(message.command[1:])
+
+    # Send a request to the Google Books API with the search query
+    url = f"https://www.googleapis.com/books/v1/volumes?q={search_query}"
+    response = requests.get(url)
+
+    # Parse the response and extract the book details and thumbnail URL
+    book_data = response.json()["items"][0]["volumeInfo"]
+    title = book_data["title"]
+    authors = ", ".join(book_data["authors"])
+    publisher = book_data["publisher"]
+    published_date = book_data["publishedDate"]
+    description = book_data["description"]
+    thumbnail_url = book_data["imageLinks"]["thumbnail"]
+
+    # Construct the message text with book details and thumbnail URL
+    message_text = f"<b>{title}</b> by {authors}\n\n"
+    message_text += f"<b>Publisher:</b> {publisher}\n"
+    message_text += f"<b>Publication Date:</b> {published_date}\n\n"
+    message_text += f"<i>{description}</i>\n"
+    message_text += f"Thumbnail URL: {thumbnail_url}"
+
+    # Send the message with the book details and thumbnail URL
+    message.reply_text(message_text, parse_mode="html")
 
 @FilterBot.on_callback_query(filters.regex('main'))
 async def maincallback(client: FilterBot, message):
