@@ -17,7 +17,7 @@ async def startCMD(client: FilterBot, message: Message):
       InlineKeyboardButton('Help', callback_data='main#help'),
       InlineKeyboardButton('About', callback_data='main#about')
       ],[
-      InlineKeyboardButton('Update', url='t.me/Mo_Tech_YT'),
+      InlineKeyboardButton('Update', url='t.me/check_this_channel'),
       InlineKeyboardButton('Support', url='t.me/motechgroup')
       ]]
 
@@ -101,7 +101,7 @@ async def maincallback(client: FilterBot, message):
         keyboard = [[ InlineKeyboardButton('Add Me To Your Chat', url=f"t.me/{bot.username}?startgroup=true") ],
                     [ InlineKeyboardButton('Help', callback_data='main#help'),
                       InlineKeyboardButton('About', callback_data='main#about') ],
-                    [ InlineKeyboardButton('Update', url='t.me/mo_tech_yt'),
+                    [ InlineKeyboardButton('Update', url='t.me/check_this_channel'),
                       InlineKeyboardButton('Support', url='t.me/motechgroup') ]]
         await message.message.edit(text=StartTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard), disable_web_page_preview=True)
 
