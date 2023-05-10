@@ -76,25 +76,7 @@ async def aboutCMD(client: FilterBot, message: Message):
     else:
         await message.reply_photo(photo=random.choice(BOT_PICS), caption=AboutTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
 
-@FilterBot.on_message()
-async def get_song_details(client, message):
-    song_name = message.text
-    results = sp.search(q=song_name, limit=1)
-    if results:
-        # Send song name
-        name = results['tracks']['items'][0]['name']
 
-        # Send artist names
-        artists = results['tracks']['items'][0]['artists']
-        for artist in artists:
-            art = artist['name']
-
-        # Send album name
-        album = results['tracks']['items'][0]['album']['name']
-
-        # Send thumbnail image URL
-        thumbnail_url = results['tracks']['items'][0]['album']['images'][0]['url']
-        await message.reply_photo(thumbnail_url)
 
 async def get_book_details(client, message):
     # Get the search query from the message text
