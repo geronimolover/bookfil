@@ -32,7 +32,19 @@ async def startCMD(client: FilterBot, message: Message):
     else:
         await message.reply_photo(photo=random.choice(BOT_PICS), caption=StartTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
 
+@FilterBot.on_message(filters.private & filters.command("hi"))
+async def helpCMD(client: FilterBot, message: Message):
 
+    if not await db.is_user_exist(message.from_user.id):
+        await db.add_user(message.from_user.first_name, message.from_user.id)
+
+    keyboard = [[ InlineKeyboardButton('Home', callback_data='main#start'),
+                  InlineKeyboardButton('Close', callback_data='main#close') ]]
+
+    if "motech" == BOT_PICS[0]:
+        await message.reply_text(text=HelpTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
+    else:
+        await message.reply_photo(photo=random.choice(BOT_PICS), caption=HelpTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
 
 @FilterBot.on_message(filters.private & filters.command("help"))
 async def helpCMD(client: FilterBot, message: Message):
@@ -128,8 +140,8 @@ async def maincallback(client: FilterBot, message):
         keyboard = [[ InlineKeyboardButton('Add Me To Your Chat', url=f"t.me/{bot.username}?startgroup=true") ],
                     [ InlineKeyboardButton('Help', callback_data='main#help'),
                       InlineKeyboardButton('About', callback_data='main#about') ],
-                    [ InlineKeyboardButton('Update', url='t.me/check_this_channel'),
-                      InlineKeyboardButton('Support', url='t.me/motechgroup') ]]
+                    [ InlineKeyboardButton('Channel', url='t.me/check_this_channel'),
+                      InlineKeyboardButton('Group', url='t.me/song_requestgroup') ]]
         await message.message.edit(text=StartTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard), disable_web_page_preview=True)
 
     elif type == "help":
