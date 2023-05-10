@@ -34,7 +34,7 @@ Add me as admin in your group and start filtering :)
 /id  -  Shows ID information
 /info userid  -  Shows User Information. Use <code>/info</code> as reply to some message for their details!
 
-© @Mo_Tech_YT
+© @Mo_Tech
 """
 
 AboutTxT = """
