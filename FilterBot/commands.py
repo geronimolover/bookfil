@@ -96,8 +96,7 @@ async def get_song_details(client, message):
         thumbnail_url = results['tracks']['items'][0]['album']['images'][0]['url']
         await message.reply_photo(thumbnail_url)
 
-@FilterBot.on_message(filters.private & filters.command("book"))
-def get_book_details(client, message):
+async def get_book_details(client, message):
     # Get the search query from the message text
     search_query = " ".join(message.command[1:])
 
@@ -124,6 +123,10 @@ def get_book_details(client, message):
 
     # Send the message with the book details and thumbnail URL
     await message.reply_text(message_text, parse_mode="html")
+
+@FilterBot.on_message(filters.private & filters.command("book"))
+async def handle_book_command(client, message):
+    await get_book_details(client, message)
 
 
 @FilterBot.on_callback_query(filters.regex('main'))
