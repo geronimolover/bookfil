@@ -1,9 +1,14 @@
 import random
 import requests
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 from pyrogram import Client as FilterBot, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from configs import BOT_PICS, StartTxT, HelpTxT, AboutTxT, LOGGER
 from FilterBot.database import db
+
+# Initialize Spotify API credentials
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="61dcb7d7bff442e3a54a3340825ade72", client_secret="ee316ec4c1e848078d9131c8922a343d"))
 
 @FilterBot.on_message(filters.private & filters.command("start"))
 async def startCMD(client: FilterBot, message: Message):
@@ -58,6 +63,26 @@ async def aboutCMD(client: FilterBot, message: Message):
         await message.reply_text(text=AboutTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
     else:
         await message.reply_photo(photo=random.choice(BOT_PICS), caption=AboutTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
+
+@FilterBot.on_message()
+async def get_song_details(client, message):
+    song_name = message.text
+    results = sp.search(q=song_name, limit=1)
+    if results:
+        # Send song name
+        name = results['tracks']['items'][0]['name']
+
+        # Send artist names
+        artists = results['tracks']['items'][0]['artists']
+        for artist in artists:
+            art = artist['name']
+
+        # Send album name
+        album = results['tracks']['items'][0]['album']['name']
+
+        # Send thumbnail image URL
+        thumbnail_url = results['tracks']['items'][0]['album']['images'][0]['url']
+        await message.reply_photo(thumbnail_url)
 
 @FilterBot.on_message(filters.private & filters.command("book"))
 def get_book_details(client, message):
