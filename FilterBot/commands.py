@@ -95,11 +95,13 @@ async def get_book_details(client, message):
         publisher = book_data["publisher"]
         published_date = book_data["publishedDate"]
         description = book_data["description"]
+        rating = book_data["averageRating"]
         thumbnail_url = book_data["imageLinks"]["thumbnail"]
 
     # Construct the message text with book details and thumbnail URL
         message_text = f"<b>{title}</b> by {authors}\n\n"
         message_text += f"<b>Publisher:</b> {publisher}\n"
+        message_text += f"<b>Rating:</b> {rating}\n"
         message_text += f"<b>Publication Date:</b> {published_date}\n\n"
         message_text += f"<i>{description}</i>"
 
