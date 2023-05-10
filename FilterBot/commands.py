@@ -1,4 +1,5 @@
 import random
+import requests
 from pyrogram import Client as FilterBot, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from configs import BOT_PICS, StartTxT, HelpTxT, AboutTxT, LOGGER
@@ -85,6 +86,7 @@ def get_book_details(client, message):
 
     # Send the message with the book details and thumbnail URL
     message.reply_text(message_text, parse_mode="html")
+    await message.reply_text(message_text, parse_mode="html")
 
 @FilterBot.on_callback_query(filters.regex('main'))
 async def maincallback(client: FilterBot, message):
