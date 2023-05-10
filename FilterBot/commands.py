@@ -106,24 +106,25 @@ def get_book_details(client, message):
     response = requests.get(url)
 
     # Parse the response and extract the book details and thumbnail URL
-    book_data = response.json()["items"][0]["volumeInfo"]
-    title = book_data["title"]
-    authors = ", ".join(book_data["authors"])
-    publisher = book_data["publisher"]
-    published_date = book_data["publishedDate"]
-    description = book_data["description"]
-    thumbnail_url = book_data["imageLinks"]["thumbnail"]
+    if response:
+        book_data = response.json()["items"][0]["volumeInfo"]
+        title = book_data["title"]
+        authors = ", ".join(book_data["authors"])
+        publisher = book_data["publisher"]
+        published_date = book_data["publishedDate"]
+        description = book_data["description"]
+        thumbnail_url = book_data["imageLinks"]["thumbnail"]
 
     # Construct the message text with book details and thumbnail URL
-    message_text = f"<b>{title}</b> by {authors}\n\n"
-    message_text += f"<b>Publisher:</b> {publisher}\n"
-    message_text += f"<b>Publication Date:</b> {published_date}\n\n"
-    message_text += f"<i>{description}</i>\n"
-    message_text += f"Thumbnail URL: {thumbnail_url}"
+        message_text = f"<b>{title}</b> by {authors}\n\n"
+        message_text += f"<b>Publisher:</b> {publisher}\n"
+        message_text += f"<b>Publication Date:</b> {published_date}\n\n"
+        message_text += f"<i>{description}</i>\n"
+        message_text += f"Thumbnail URL: {thumbnail_url}"
 
     # Send the message with the book details and thumbnail URL
-    message.reply_text(message_text, parse_mode="html")
-    
+    await message.reply_text(message_text, parse_mode="html")
+
 
 @FilterBot.on_callback_query(filters.regex('main'))
 async def maincallback(client: FilterBot, message):
