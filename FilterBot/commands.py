@@ -6,6 +6,7 @@ from pyrogram import Client as FilterBot, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from configs import BOT_PICS, StartTxT, HelpTxT, AboutTxT, LOGGER
 from FilterBot.database import db
+from pyrogram import enmus
 
 # Initialize Spotify API credentials
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="61dcb7d7bff442e3a54a3340825ade72", client_secret="ee316ec4c1e848078d9131c8922a343d"))
@@ -104,7 +105,7 @@ async def get_book_details(client, message):
         message_text += f"Thumbnail URL: {thumbnail_url}"
 
     # Send the message with the book details and thumbnail URL
-    await message.reply_text(message_text, parse_mode=html)
+    await message.reply_text(message_text, parse_mode=enmus.ParseMode.HTML)
 
 @FilterBot.on_message(filters.private & filters.command("book"))
 async def handle_book_command(client, message):
