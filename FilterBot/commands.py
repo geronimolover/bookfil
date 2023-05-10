@@ -123,7 +123,7 @@ def get_book_details(client, message):
 
     # Send the message with the book details and thumbnail URL
     message.reply_text(message_text, parse_mode="html")
-    await message.reply_text(message_text, parse_mode="html")
+    
 
 @FilterBot.on_callback_query(filters.regex('main'))
 async def maincallback(client: FilterBot, message):
