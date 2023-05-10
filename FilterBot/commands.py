@@ -104,7 +104,7 @@ async def get_book_details(client, message):
         message_text += f"Thumbnail URL: {thumbnail_url}"
 
     # Send the message with the book details and thumbnail URL
-    await message.reply_text(message_text, parse_mode="html")
+    await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
 
 @FilterBot.on_message(filters.private & filters.command("book"))
 async def handle_book_command(client, message):
