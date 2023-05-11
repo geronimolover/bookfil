@@ -25,7 +25,7 @@ async def startCMD(client: FilterBot, message: Message):
       InlineKeyboardButton('About', callback_data='main#about')
       ],[
       InlineKeyboardButton('Update', url='t.me/check_this_channel'),
-      inlinekeyboardbutton('Group', url='t.me/song_requestgroup')
+      InlineKeyboardButton('Group', url='t.me/song_requestgroup')
       ]]
 
     if "motech" == BOT_PICS[0]:
@@ -109,8 +109,8 @@ async def get_book_details(client, message):
         message_text += f"<i>{description}</i>"
 
     # Send the message with the book details and thumbnail URL
-    await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
-    await message.reply_photo(thumbnail_url,caption=message_text)
+        await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
+        await message.reply_photo(thumbnail_url,caption=message_text)
 
 @FilterBot.on_message(filters.private & filters.command("book"))
 async def handle_book_command(client, message):
