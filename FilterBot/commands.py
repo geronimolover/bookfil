@@ -133,6 +133,7 @@ async def get_book_details(client, message):
         await message.reply_photo(thumbnail_url, caption=message_text)
     except Exception as e:
         await message.reply_text(f"Error: {e}")
+        await message.reply_text(f"Here is {search_query}")
 
 @FilterBot.on_message(filters.private & filters.command("book"))
 
