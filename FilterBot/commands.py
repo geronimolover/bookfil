@@ -80,7 +80,7 @@ async def aboutCMD(client: FilterBot, message: Message):
 
 async def get_book_details(client, message):
     # Get the search query from the message text
-    search_query = " ".join(message.command[1:])
+    search_query = message.text
 
     # Send a request to the Google Books API with the search query
     url = f"https://www.googleapis.com/books/v1/volumes?q={search_query}"
@@ -135,7 +135,7 @@ async def get_book_details(client, message):
         await message.reply_text(f"Error: {e}")
         await message.reply_text(f"Here is {search_query}")
 
-@FilterBot.on_message(filters.private & filters.command("book"))
+@FilterBot.on_message(filters.private & filters.text & ~filters.edited & filters.incoming)
 
 async def handle_book_command(client, message):
 
