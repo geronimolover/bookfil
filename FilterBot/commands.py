@@ -123,6 +123,10 @@ async def get_book_details(client, message):
         await message.reply_text("No results")
         return
 
+
+    if not thumbnail_url:
+
+        thumbnail_url = "https://graph.org/file/247b80ee562912381ad02.jpg"
     # Send the message with the book details and thumbnail URL
     try:
         await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
