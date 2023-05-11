@@ -78,45 +78,62 @@ async def aboutCMD(client: FilterBot, message: Message):
         await message.reply_photo(photo=random.choice(BOT_PICS), caption=AboutTxT.format(mention=message.from_user.mention), reply_markup=InlineKeyboardMarkup(keyboard))
 
 
-
 async def get_book_details(client, message):
     # Get the search query from the message text
     search_query = " ".join(message.command[1:])
 
     # Send a request to the Google Books API with the search query
     url = f"https://www.googleapis.com/books/v1/volumes?q={search_query}"
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        await message.reply_text(f"Error: {e}")
+        return
 
     # Parse the response and extract the book details and thumbnail URL
-    if response:
-        book_data = response.json()["items"][0]["volumeInfo"]
-        title = book_data["title"]
-        authors = ", ".join(book_data["authors"])
-        publisher = book_data["publisher"]
-        published_date = book_data["publishedDate"]
-        description = book_data["description"]
-        rating = book_data["averageRating"]
-        lang = book_data["language"]
-        thumbnail_url = book_data["imageLinks"]["thumbnail"]
+    try:
+        if response:
+            book_data = response.json()["items"][0]["volumeInfo"]
+            title = book_data["title"]
+            authors = ", ".join(book_data.get("authors", []))
+            publisher = book_data.get("publisher", "")
+            published_date = book_data.get("publishedDate", "")
+            description = book_data.get("description", "")
+            rating = book_data.get("averageRating", "")
+            lang = book_data.get("language", "")
+            thumbnail_url = book_data["imageLinks"]["thumbnail"]
 
-    # Construct the message text with book details and thumbnail URL
-        message_text = f"<b>{title}</b> by {authors}\n\n"
+            # Construct the message text with book details and thumbnail URL
+            message_text = f"<b>{title}</b> by {authors}\n\n"
 
-        message_text += f"<b>Rating:</b> {rating}/5\n"
-        message_text += f"<b>Language:</b> {lang}\n"
-        message_text += f"<b>Publisher:</b> {publisher}\n"
-        message_text += f"<b>Publication Date:</b> {published_date}\n\n"
-        message_text += f"<i>{description}</i>"
+            if rating:
+                message_text += f"<b>Rating:</b> {rating}/5\n"
+            if lang:
+                message_text += f"<b>Language:</b> {lang}\n"
+            if publisher:
+                message_text += f"<b>Publisher:</b> {publisher}\n"
+            if published_date:
+                message_text += f"<b>Publication Date:</b> {published_date}\n\n"
+            if description:
+                message_text += f"<i>{description}</i>"
+        else:
+            await message.reply_text("No results")
+
+    except (KeyError, IndexError):
+        await message.reply_text("No results")
+        return
 
     # Send the message with the book details and thumbnail URL
+    try:
         await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
-        await message.reply_photo(thumbnail_url,caption=message_text)
-    else:
-        await message.reply_text("No results")
+        await message.reply_photo(thumbnail_url, caption=message_text)
+    except Exception as e:
+        await message.reply_text(f"Error: {e}")
 
-@FilterBot.on_message(filters.private & filters.command("book"))
-async def handle_book_command(client, message):
-    await get_book_details(client, message)
+
+
+
+
 
 
 @FilterBot.on_callback_query(filters.regex('main'))
