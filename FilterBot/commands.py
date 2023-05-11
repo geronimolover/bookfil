@@ -130,7 +130,11 @@ async def get_book_details(client, message):
     except Exception as e:
         await message.reply_text(f"Error: {e}")
 
+@FilterBot.on_message(filters.private & filters.command("book"))
 
+async def handle_book_command(client, message):
+
+    await get_book_details(client, message)
 
 
 
