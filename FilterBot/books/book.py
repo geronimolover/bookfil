@@ -5,7 +5,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from configs import BOT_PICS, StartTxT, HelpTxT, AboutTxT, LOGGER
 from FilterBot.database import db
 from pyrogram import enums
-
+from pyrogram.types import Message
 
 # Replace with your OpenLibrary API key
 OPEN_LIBRARY_API_KEY = "your_api_key_here"
@@ -24,12 +24,12 @@ def get_book_id(book_title):
 
 # Define a command handler for the /book command
 @FilterBot.on_message(filters.command("book"))
-def send_book(_, update):
+def send_book(client, message):
     try:
-        # Check if the update is a message and has a document
-        if update.message and update.message.document:
+        # Check if message object has a document attribute
+        if message.document:
             # Get the book title from the user's message
-            book_title = " ".join(update.command[1:])
+            book_title = " ".join(message.text.split()[1:])
             # Call the OpenLibrary API to get the book ID and download link
             book_id = get_book_id(book_title)
             if book_id:
@@ -39,11 +39,14 @@ def send_book(_, update):
                 if download_link:
                     # Send the book file to the user as a document
                     file_name = f"{book_title}.epub"
-                    update.reply_document(document=download_link, file_name=file_name)
+                    with open(file_name, "wb") as f:
+                        f.write(requests.get(download_link).content)
+                    message.reply_document(document=open(file_name, "rb"), file_name=file_name)
+                    os.remove(file_name)  # Remove the file after sending to save storage
                 else:
-                    update.reply_text(f"Sorry, I couldn't find the download link for book '{book_title}'")
+                    message.reply_text(f"Sorry, I couldn't find the download link for book '{book_title}'")
             else:
-                update.reply_text(f"Sorry, I couldn't find any book with title '{book_title}'")
+                message.reply_text(f"Sorry, I couldn't find any book with title '{book_title}'")
     except Exception as e:
         print(e)
-        update.reply_text(f"An error occurred{e}")
+        message.reply_text(f"An error occurred {e}")
