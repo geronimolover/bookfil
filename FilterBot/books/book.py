@@ -46,4 +46,4 @@ def send_book(_, update):
                 update.reply_text(f"Sorry, I couldn't find any book with title '{book_title}'")
     except Exception as e:
         print(e)
-        update.reply_text("An error occurred")
+        update.reply_text(f"An error occurred{e}")
