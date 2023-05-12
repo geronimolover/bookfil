@@ -135,7 +135,7 @@ async def get_book_details(client, message):
         await message.reply_text(f"Error: {e}")
         await message.reply_text(f"Here is {search_query}")
 
-@FilterBot.on_message(filters.private & filters.text & ~filters.edited & filters.incoming)
+@FilterBot.on_message(filters.private & filters.text & filters.incoming)
 
 async def handle_book_command(client, message):
 
