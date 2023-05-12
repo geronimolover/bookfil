@@ -38,4 +38,4 @@ def get_bookid(bot, update):
         bot.send_message(chat_id=update.chat.id, text=response_text)
     except Exception as e:
         print(e)
-        bot.send_message(chat_id=update.chat.id, text="An error occurred")
+        bot.send_message(chat_id=update.chat.id, text=f"An error occurred {e}")
