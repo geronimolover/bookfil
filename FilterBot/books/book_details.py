@@ -22,9 +22,6 @@ def get_book_id(book_title):
     else:
         return None
 
-# Create a new Pyrogram client instance
-app = Client("my_bot")
-
 # Define a command handler for the /bookid command
 @FilterBot.on_message(filters.command("bookid"))
 def get_bookid(bot, update):
