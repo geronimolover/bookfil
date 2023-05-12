@@ -123,22 +123,17 @@ async def get_book_details(client, message):
         await message.reply_text("No results")
         return
 
-
     if not thumbnail_url:
-
         thumbnail_url = "https://graph.org/file/247b80ee562912381ad02.jpg"
     # Send the message with the book details and thumbnail URL
     try:
-        await message.reply_text(message_text, parse_mode=enums.ParseMode.HTML)
         await message.reply_photo(thumbnail_url, caption=message_text)
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         await message.reply_text(f"Here is {search_query}")
 
 @FilterBot.on_message(filters.private & filters.text & filters.incoming)
-
 async def handle_book_command(client, message):
-
     await get_book_details(client, message)
 
 
